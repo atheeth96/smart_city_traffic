@@ -1,0 +1,8 @@
+.DS_Store
+ivy_demo*
+*cache*
+*mp4*
+processed_video_2.avi
+processed_video.avi
+*weights*
+*jpg*
