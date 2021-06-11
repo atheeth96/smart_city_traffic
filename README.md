@@ -19,7 +19,7 @@ An python implementation of vehicle enumeration software.
  Sample Result
 
   ![GT Nuclei](processed_video_2.1.gif)
-  **GT Nuclei**
+  
 
 
 
