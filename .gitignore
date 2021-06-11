@@ -2,7 +2,7 @@
 ivy_demo*
 *cache*
 *mp4*
-processed_video_2.avi
-processed_video.avi
+*avi
+*mov
 *weights*
 *jpg*
