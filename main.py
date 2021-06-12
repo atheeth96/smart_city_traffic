@@ -1,9 +1,3 @@
-#############################################
-# Object detection - YOLO - OpenCV
-# Author : Arun Ponnusamy   (July 16, 2018)
-# Website : http://www.arunponnusamy.com
-############################################
-
 
 import cv2
 import argparse
@@ -28,12 +22,12 @@ ap.add_argument('-o', '--output_video', required=True,
 args = ap.parse_args()
 
 scale = 0.00392        # Scaling for preprocessing frame before feeding to yolo
-DI=15                  # Detection intervals
+DI=10                  # Detection intervals
 conf_threshold = 0.5   # Threshold for selecting label of vehicle
 nms_threshold = 0.4    # Threshold for Non Max Suppression
 mcdf=2                 # Max Continous Detection Failures
 mctf=2                 # Max Continous Tracking Failures
-
+percentage=45          # Resizing parameter
 counting_line={'label': 'Bottom', 'line': [(0,880), (1920,880)]} # The line used for counting as vehicles pass it 
 tracker='kcf'                                                    # The type of tracker used between DI
 class_file=args.classes
@@ -44,6 +38,12 @@ vs = cv2.VideoCapture(args.video)
 
 writer = None
 (W, H) = (None, None)
+
+def rescale_frame(frame, percent=75):
+    width = int(frame.shape[1] * percent/ 100)
+    height = int(frame.shape[0] * percent/ 100)
+    dim = (width, height)
+    return cv2.resize(frame, dim, interpolation =cv2.INTER_AREA)
 
 # Try to determine the total number of frames in the video file
 try:
@@ -86,7 +86,7 @@ while success:
         # initialize our video writer
         fourcc = cv2.VideoWriter_fourcc(*"MJPG")
         writer = cv2.VideoWriter(args.output_video,cv2.CAP_OPENCV_MJPEG, fourcc, 30,
-        (frame.shape[1], frame.shape[0]), True)
+        (int(frame.shape[1]*percentage/100), int(frame.shape[0]*percentage/100)), True)
         # some information on processing single frame
         end= time.time()
         if total > 0:
@@ -96,6 +96,7 @@ while success:
                 elap * total))
     # write the output frame to disk
     if output_frame is not None:
+        output_frame=rescale_frame(output_frame,percentage)
         writer.write(output_frame)
 
     success, frame = vs.read()
